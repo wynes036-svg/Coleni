@@ -12,12 +12,22 @@ const io = socketIO(server);
 
 const PORT = process.env.PORT || 3000;
 
-// Create uploads directory
-if (!fs.existsSync('uploads')) {
-  fs.mkdirSync('uploads');
-  fs.mkdirSync('uploads/voice');
-  fs.mkdirSync('uploads/profiles');
-  fs.mkdirSync('uploads/backgrounds');
+// Create uploads directory with proper error handling
+try {
+  if (!fs.existsSync('uploads')) {
+    fs.mkdirSync('uploads', { recursive: true });
+  }
+  if (!fs.existsSync('uploads/voice')) {
+    fs.mkdirSync('uploads/voice', { recursive: true });
+  }
+  if (!fs.existsSync('uploads/profiles')) {
+    fs.mkdirSync('uploads/profiles', { recursive: true });
+  }
+  if (!fs.existsSync('uploads/backgrounds')) {
+    fs.mkdirSync('uploads/backgrounds', { recursive: true });
+  }
+} catch (err) {
+  console.log('Note: Could not create uploads directory, using temp storage');
 }
 
 // Storage for voice notes
@@ -52,6 +62,9 @@ app.post('/api/create-room', (req, res) => {
 
 // Upload voice note
 app.post('/api/upload-voice', upload.single('voice'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
+  }
   res.json({ filename: req.file.filename });
 });
 
@@ -83,7 +96,16 @@ io.on('connection', (socket) => {
 
   socket.on('send-message', ({ roomId, message, type, data }) => {
     const user = users.get(socket.id);
+    if (!user) {
+      console.log('User not found for socket:', socket.id);
+      return;
+    }
+    
     const room = rooms.get(roomId);
+    if (!room) {
+      console.log('Room not found:', roomId);
+      return;
+    }
     
     const msg = {
       id: uuidv4(),
