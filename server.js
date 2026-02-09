@@ -154,6 +154,7 @@ io.on('connection', (socket) => {
 
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Coleni server running on port ${PORT}`);
+  console.log(`Server is ready and listening for connections`);
   console.log(`Local: http://localhost:${PORT}`);
   
   // Get local IP for mobile access
