@@ -12,6 +12,8 @@ body {
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: fixed;
+  width: 100%;
 }
 
 .screen {
@@ -124,6 +126,21 @@ body {
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
+@media (max-width: 768px) {
+  .chat-header {
+    padding: 0 10px;
+  }
+  
+  .chat-header h2 {
+    font-size: 18px;
+  }
+  
+  .header-actions button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
 .header-actions {
   display: flex;
   gap: 10px;
@@ -185,12 +202,26 @@ body {
   padding: 20px;
   background-size: cover;
   background-position: center;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  #messages-container {
+    padding: 10px;
+  }
 }
 
 .message {
   display: flex;
   margin-bottom: 15px;
   animation: slideIn 0.3s ease;
+  align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+  .message {
+    margin-bottom: 10px;
+  }
 }
 
 @keyframes slideIn {
@@ -210,6 +241,15 @@ body {
   border-radius: 50%;
   margin-right: 10px;
   object-fit: cover;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .message-avatar {
+    width: 30px;
+    height: 30px;
+    margin-right: 8px;
+  }
 }
 
 .message-content {
@@ -218,11 +258,15 @@ body {
   padding: 10px 15px;
   border-radius: 15px;
   position: relative;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 @media (max-width: 768px) {
   .message-content {
-    max-width: 75%;
+    max-width: 70%;
+    padding: 8px 12px;
+    font-size: 14px;
   }
 }
 
@@ -250,6 +294,17 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.message-voice audio {
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .message-voice audio {
+    width: 180px;
+    height: 30px;
+  }
 }
 
 .message-timestamp {
@@ -302,6 +357,14 @@ body {
   border: 2px solid #e0e0e0;
   border-radius: 10px;
   font-size: 16px;
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  #message-input {
+    padding: 10px;
+    font-size: 16px;
+  }
 }
 
 #send-btn {
@@ -344,6 +407,15 @@ body {
   max-width: 500px;
   width: 90%;
   position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 20px;
+    width: 95%;
+  }
 }
 
 .close {
@@ -401,6 +473,16 @@ body {
 
 .picker.hidden {
   display: none;
+}
+
+@media (max-width: 768px) {
+  .picker {
+    left: 10px;
+    right: 10px;
+    bottom: 70px;
+    padding: 10px;
+    max-width: calc(100% - 20px);
+  }
 }
 
 .sticker, .gift {
