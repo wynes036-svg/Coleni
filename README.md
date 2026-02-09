@@ -39,3 +39,5 @@ The START-HERE.md file has super simple step-by-step instructions for:
 - Multer for file uploads
 
 Enjoy chatting with Coleni! 🎊
+
+Updated: Mobile-optimized for the best experience on phones!
