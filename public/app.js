@@ -4,6 +4,8 @@ let currentRoom = null;
 let currentUser = null;
 let mediaRecorder = null;
 let audioChunks = [];
+let notificationSound = null;
+let notificationsEnabled = false;
 
 // DOM Elements
 const loginScreen = document.getElementById('login-screen');
@@ -86,6 +88,8 @@ function joinRoom(roomId, username) {
 function showChatScreen() {
   loginScreen.classList.remove('active');
   chatScreen.classList.add('active');
+  requestNotificationPermission();
+  createNotificationSound();
 }
 
 // Send Message
@@ -240,6 +244,31 @@ document.querySelectorAll('.bg-preset').forEach(btn => {
   });
 });
 
+// Enable Notifications Button
+document.getElementById('enable-notifications-btn').addEventListener('click', () => {
+  if ('Notification' in window) {
+    Notification.requestPermission().then(permission => {
+      const statusEl = document.getElementById('notification-status');
+      if (permission === 'granted') {
+        notificationsEnabled = true;
+        statusEl.textContent = '✅ Notifications enabled!';
+        statusEl.style.color = '#4caf50';
+        
+        // Show test notification
+        new Notification('Coleni', {
+          body: 'Notifications are now enabled! You\'ll get alerts for new messages.',
+          icon: '/default-avatar.png'
+        });
+      } else {
+        statusEl.textContent = '❌ Notifications blocked. Check browser settings.';
+        statusEl.style.color = '#f44336';
+      }
+    });
+  } else {
+    alert('Your browser does not support notifications');
+  }
+});
+
 // Socket Events
 socket.on('user-joined', ({ user, users }) => {
   updateUsersList(users);
@@ -256,6 +285,12 @@ socket.on('load-messages', (messages) => {
 
 socket.on('new-message', (msg) => {
   displayMessage(msg);
+  
+  // Show notification if message is from someone else
+  if (msg.user !== currentUser) {
+    showNotification(msg);
+    playNotificationSound();
+  }
 });
 
 socket.on('background-updated', (background) => {
@@ -317,4 +352,85 @@ function addSystemMessage(text) {
   messageDiv.style.margin = '10px 0';
   messageDiv.textContent = text;
   messagesContainer.appendChild(messageDiv);
+}
+
+// Notification Functions
+function requestNotificationPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission().then(permission => {
+      if (permission === 'granted') {
+        notificationsEnabled = true;
+        console.log('Notifications enabled');
+      }
+    });
+  } else if (Notification.permission === 'granted') {
+    notificationsEnabled = true;
+  }
+}
+
+function showNotification(msg) {
+  if (!notificationsEnabled || document.hasFocus()) {
+    return; // Don't show notification if app is in focus
+  }
+  
+  let body = '';
+  if (msg.type === 'text') {
+    body = msg.message;
+  } else if (msg.type === 'sticker') {
+    body = `Sent a sticker ${msg.message}`;
+  } else if (msg.type === 'gift') {
+    body = `Sent a gift ${msg.message}`;
+  } else if (msg.type === 'voice') {
+    body = '🎤 Sent a voice note';
+  }
+  
+  const notification = new Notification(`${msg.user} - Coleni`, {
+    body: body,
+    icon: msg.profilePhoto || '/default-avatar.png',
+    badge: '/default-avatar.png',
+    tag: 'coleni-message',
+    requireInteraction: false
+  });
+  
+  notification.onclick = () => {
+    window.focus();
+    notification.close();
+  };
+  
+  // Auto close after 5 seconds
+  setTimeout(() => notification.close(), 5000);
+}
+
+function createNotificationSound() {
+  // Create a simple notification sound using Web Audio API
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const duration = 0.2;
+  const frequency = 800;
+  
+  notificationSound = () => {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.value = frequency;
+    oscillator.type = 'sine';
+    
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+    
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + duration);
+  };
+}
+
+function playNotificationSound() {
+  if (notificationSound && !document.hasFocus()) {
+    try {
+      notificationSound();
+    } catch (e) {
+      console.log('Could not play notification sound');
+    }
+  }
 }
