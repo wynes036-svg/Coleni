@@ -1,0 +1,64 @@
+========================================
+COLENI - SETUP COMMANDS
+========================================
+
+STEP 1: RESTART YOUR COMPUTER
+(Git needs this to work after installation)
+
+STEP 2: OPEN COMMAND PROMPT IN COLENI FOLDER
+- Open File Explorer
+- Go to: C:\Users\USER\Documents\coleni
+- Click in the address bar and type: cmd
+- Press Enter
+
+STEP 3: RUN THESE COMMANDS ONE BY ONE
+Copy and paste each line, press Enter after each one:
+
+git init
+
+git add .
+
+git commit -m "Initial Coleni app"
+
+STEP 4: CREATE GITHUB REPOSITORY
+- Go to: https://github.com/new
+- Repository name: coleni
+- Keep it PUBLIC (important!)
+- Click "Create repository"
+
+STEP 5: GITHUB WILL SHOW YOU COMMANDS
+Look for the section "...or push an existing repository from the command line"
+It will show 3 commands that look like this (but with YOUR username):
+
+git remote add origin https://github.com/YOUR_USERNAME/coleni.git
+git branch -M main
+git push -u origin main
+
+Copy those 3 commands from GitHub and paste them into your Command Prompt.
+
+STEP 6: DEPLOY ON RENDER
+- Go to: https://render.com
+- Sign up with your GitHub account
+- Click "New +" → "Web Service"
+- Select your "coleni" repository
+- Click "Create Web Service"
+- Wait 3-5 minutes
+- You'll get a link like: https://coleni-xxxx.onrender.com
+
+DONE! Share your Coleni link with friends! 🎉
+
+========================================
+TROUBLESHOOTING
+========================================
+
+If git still doesn't work after restart:
+- Make sure you downloaded from: https://git-scm.com/download/win
+- During installation, make sure "Git from the command line" was selected
+- Try opening a NEW Command Prompt window
+
+If you get "permission denied" on GitHub:
+- You may need to set up authentication
+- Easiest way: Use GitHub Desktop instead (https://desktop.github.com)
+- Or follow: https://docs.github.com/en/authentication
+
+========================================

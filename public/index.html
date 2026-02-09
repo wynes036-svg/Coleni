@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Coleni - Chat with Friends</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+      <div class="login-container">
+        <h1>🎉 Coleni</h1>
+        <p>Chat with your friends</p>
+        <input type="text" id="username-input" placeholder="Enter your name" />
+        <input type="file" id="profile-photo-input" accept="image/*" />
+        <button id="create-room-btn">Create New Room</button>
+        <div class="divider">OR</div>
+        <input type="text" id="room-id-input" placeholder="Enter Coleni room code" />
+        <button id="join-room-btn">Join Room</button>
+      </div>
+    </div>
+
+    <!-- Chat Screen -->
+    <div id="chat-screen" class="screen">
+      <div class="chat-container">
+        <div class="chat-header">
+          <h2>Coleni Chat</h2>
+          <div class="header-actions">
+            <button id="share-link-btn">📋 Share Link</button>
+            <button id="settings-btn">⚙️</button>
+          </div>
+        </div>
+
+        <div class="chat-sidebar">
+          <h3>Online Friends</h3>
+          <div id="users-list"></div>
+        </div>
+
+        <div class="chat-main">
+          <div id="messages-container"></div>
+          
+          <div class="chat-input-container">
+            <button id="sticker-btn" class="icon-btn">😊</button>
+            <button id="gift-btn" class="icon-btn">🎁</button>
+            <button id="voice-btn" class="icon-btn">🎤</button>
+            <input type="text" id="message-input" placeholder="Type a message..." />
+            <button id="send-btn">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Settings</h2>
+        <div class="settings-section">
+          <h3>Profile Photo</h3>
+          <input type="file" id="update-profile-photo" accept="image/*" />
+        </div>
+        <div class="settings-section">
+          <h3>Chat Background</h3>
+          <input type="file" id="update-background" accept="image/*" />
+          <div class="background-presets">
+            <button class="bg-preset" data-bg="#ffffff">⬜ White</button>
+            <button class="bg-preset" data-bg="#f0f0f0">⬜ Gray</button>
+            <button class="bg-preset" data-bg="#e3f2fd">🔵 Blue</button>
+            <button class="bg-preset" data-bg="#f3e5f5">🟣 Purple</button>
+            <button class="bg-preset" data-bg="#e8f5e9">🟢 Green</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sticker Picker -->
+    <div id="sticker-picker" class="picker hidden">
+      <div class="sticker" data-sticker="😀">😀</div>
+      <div class="sticker" data-sticker="😂">😂</div>
+      <div class="sticker" data-sticker="❤️">❤️</div>
+      <div class="sticker" data-sticker="👍">👍</div>
+      <div class="sticker" data-sticker="🎉">🎉</div>
+      <div class="sticker" data-sticker="🔥">🔥</div>
+      <div class="sticker" data-sticker="😎">😎</div>
+      <div class="sticker" data-sticker="🤔">🤔</div>
+    </div>
+
+    <!-- Gift Picker -->
+    <div id="gift-picker" class="picker hidden">
+      <div class="gift" data-gift="🎁">🎁 Gift</div>
+      <div class="gift" data-gift="🌹">🌹 Rose</div>
+      <div class="gift" data-gift="🍰">🍰 Cake</div>
+      <div class="gift" data-gift="☕">☕ Coffee</div>
+      <div class="gift" data-gift="🍕">🍕 Pizza</div>
+      <div class="gift" data-gift="💎">💎 Diamond</div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
